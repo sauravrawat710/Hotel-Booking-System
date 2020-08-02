@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container my-3">
+    {% if not request.user.is_staff %}
+    <h1 class="my-5 text-center">Booking Summary</h1>
+    <h3 class="my-5 text-center">Welcome {{ user.username }}</h3>
+    {% for booking in bookings %}
+    {% if booking.hotel.status == 'Not Available' %}
+    <div class="list-group">
+        <a class="list-group-item list-group-item-action active">
+            <div class="d-flex w-100 justify-content-between">
+            </div>
+            <small>This room is Not Available Right Now!</small>
+        </a>
+    </div>
+    <br>
+    {% else %}
+    <div class="list-group">
+        <a href="#" class="list-group-item list-group-item-action active">
+            <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1 font-weight-bold">{{ booking.hotel }}</h5>
+            </div>
+            <small>Price: Rs.{{ booking.hotel.price }}/Night</small>
+            <p class="mb-1">{{ booking.hotel.desc }}</small>
+        </a>
+    </div>
+    <br>
+    {% endif %}
+    {% endfor %}
+    {% else %}
+    <h1 class="my-5 text-center">Staff Panel</h1>
+    {% for hotel in hotels %}
+    <div class="row">
+        <div class="col-10">
+            <ul class="list-group">
+                <li class="list-group-item active">{{hotel.name}}</li>
+            </ul>
+        </div>
+        <div class="col-2">
+            <form action="{% url 'dashboard_update' hotel.id %}">{% csrf_token %}<button class="btn btn-success btn-md">Update</button></form>
+        </div>
+    </div>
+    <br>
+    {% endfor %}
+    {% endif %}
+</div>
+{% endblock content %}

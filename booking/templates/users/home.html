@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container">
+    <h1 class="my-5 text-center">Welcome to Hotel Booking Portal</h1>
+    <form class="row justify-content-center" method="POST" action="">{% csrf_token %}
+        <div class="form-inline">
+            <label for="">Check in Date</label>
+            <div class="col-auto">
+                <input class="form-control" type="date" value="2020-08-20" id="indate" name="indate">
+            </div>
+            <label for="">Check out Date</label>
+            <div class="col-auto">
+                <input class="form-control" type="date" value="2020-08-22" id="outdate" name="outdate">
+            </div>
+            <div class="col-auto">
+                <label class="mr-sm-2 sr-only" for="inlineFormCustomSelect">Guest</label>
+                <select class="custom-select mr-sm-2" id="guest" name="guest">
+                    <option selected>No. of Guest</option>
+                    <option value="1">One</option>
+                    <option value="2">Two</option>
+                    <option value="3">Three</option>
+                    <option value="4">Four</option>
+                </select>
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-outline-primary">Search</button>
+            </div>
+    </form>
+</div>
+
+<hr>
+
+<div class="container my-3">
+    <div class="row">
+        {% for hotel in hotels %}
+        <!-- Card -->
+        <div class="col-lg-4 col-md-6 col-sm-12 pb-4">
+            <div class="card booking-card" style="height: 37rem;">
+
+                <!-- Card image -->
+                <div class="view overlay">
+                    <img class="card-img-top img-fluid" src="{{ hotel.image.url }}"
+                        alt="Card image cap">
+                    <a href="#!">
+                        <div class="mask rgba-white-slight"></div>
+                    </a>
+                </div>
+
+                <!-- Card content -->
+                <div class="card-body">
+
+                    <!-- Title -->
+                    <h5 class="card-title font-weight-bold"><a>{{hotel.name}}</a></h5>
+                    <p class="mb-2">$ • Indian, Hotels</p>
+                    <!-- Text -->
+                    <p class="card-text">{{hotel.desc|slice:'0:200'}} <a href="">read more...</a></p>
+                    <p class="chili-pepper-text mb-0 font-weight-bold">Rs {{hotel.price}}/Night</p>
+                    <hr>
+                    {% if hotel.status == 'Not Available' %}
+                    <small>This room is Not Available Right Now!</small>
+                    {% else %}
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#id{{hotel.id}}">
+                        Book
+                    </button>
+                    {% endif %}
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="id{{hotel.id}}" tabindex="-1" role="dialog"
+                        aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Confirm Booking</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form class="justify-content-center" action="{% url 'booking' hotel.id %}"
+                                        method="POST">{% csrf_token %}
+                                        <div class="form-group">
+                                            <label for="">Check in Date</label>
+                                            <div>
+                                                <input class="form-control" type="date" value="2020-08-20"
+                                                    id="check_in_date" name="check_in_date">
+                                            </div>
+                                            <label for="">Check out Date</label>
+                                            <div>
+                                                <input class="form-control" type="date" value="2020-08-22"
+                                                    id="check_out_date" name="check_out_date">
+                                            </div>
+                                            <div>
+                                                <label class="mr-sm-2" for="inlineFormCustomSelect">Guest</label>
+                                                <select class="custom-select mr-sm-2" id="modalguest"
+                                                    name="bookingGuest">
+                                                    <option selected>No. of Guest</option>
+                                                    <option value="1">One</option>
+                                                    <option value="2">Two</option>
+                                                    <option value="3">Three</option>
+                                                    <option value="4">Four</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <input type="submit" value="Confirm Booking" class="btn btn-success"
+                                        name="Book"></input>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+        <!-- Card -->
+        {% endfor %}
+    </div>
+</div>
+
+
+{% endblock content %}

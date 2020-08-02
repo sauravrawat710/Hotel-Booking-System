@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="container">
+<h2>Login</h2>
+
+<form method="post" class="mb-3" novalidate>
+    {% csrf_token %}
+    {{ form|crispy }}
+    <input type="submit" class="btn btn-primary" value="Login">
+</form>
+
+<a href="{% url 'dashboard' %}">Back to dashboard |</a>
+<a href="{% url 'customer_signup' %}">Customer Signup |</a>
+<a href="{% url 'staff_signup' %}">Staff Signup</a>
+</div>
+{% endblock %}
