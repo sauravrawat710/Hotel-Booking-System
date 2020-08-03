@@ -10,6 +10,6 @@
 2)Modify room prices, change room status(available/not available on selected
 dates).<br>
 
-<h1>Requirments</h1>
+<h2>Requirments</h2>
 python3<br>
 django<br>
